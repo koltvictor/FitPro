@@ -8,7 +8,6 @@ import {
   Input,
 } from "native-base";
 import React, { useState } from "react";
-import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
@@ -21,12 +20,12 @@ export default function SignupScreen() {
 
   const handleSignup = async () => {
     if (email === "" || password === "" || confirmPassword === "") {
-      Alert.alert("Error", "All fields are required");
+      console.log("Error", "All fields are required");
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
+      console.log("Error", "Passwords do not match");
       return;
     }
 
@@ -36,7 +35,7 @@ export default function SignupScreen() {
         UserContext.Provider.current.setValue(newUser);
       })
       .catch((error) => {
-        Alert.alert(error);
+        console.log(error);
       });
     navigation.navigate("Home");
   };
