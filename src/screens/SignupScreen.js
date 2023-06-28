@@ -43,7 +43,7 @@ export default function SignupScreen() {
 
   return (
     <Center>
-      <Box safeArea p="2" w="90%" maxW="290" py="10">
+      <Box safeArea p="2" w="90%" h="50%" maxW="290" py="10">
         <Heading
           size="lg"
           color="coolGray.500"
