@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { auth } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
+import { action, makeObservable, observable } from "mobx";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const handleSignup = async (newUser) => {
-    setUser(newUser);
-    UserContext.Provider.current.setValue(newUser);
-  };
+  useEffect(() => {
+    const onAuthStateChanged = async (userAuth) => {
+      try {
+        if (userAuth) {
+          setUser(userAuth);
+          const uid = userAuth.uid;
+          const email = userAuth.email;
+          // Call the unsubscribe function inside the onAuthStateChanged callback
+          const unsubscribe = () => {
+            unsubscribeProfile();
+          };
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.log("Error in onAuthStateChanged: ", error);
+      }
+    };
+
+    const unsubscribe = auth.onAuthStateChanged(onAuthStateChanged);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
+
   console.log("this is provider:", user);
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };

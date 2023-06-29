@@ -8,11 +8,10 @@ import {
   Input,
 } from "native-base";
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
+import { UserContext } from "../contexts/userContext";
 
-export default function SignupScreen() {
-  const navigation = useNavigation();
+export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,9 +31,22 @@ export default function SignupScreen() {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("User created successfully", user);
+        UserContext.Provider.current = <UserContext.Provider value={user} />;
+        console.log(
+          "User set to userContext and userProvider",
+          UserContext.Provider.current
+        );
       })
       .catch((error) => {
-        console.log(error);
+        if (error.code === "auth/email-already-in-use") {
+          console.log("Error", "That email address is already in use!");
+        }
+
+        if (error.code === "auth/invalid-email") {
+          console.log("Error", "That email address is invalid!");
+        }
+
+        console.error(error);
       });
     navigation.navigate("Home");
   };
@@ -47,10 +59,17 @@ export default function SignupScreen() {
           color="coolGray.500"
           _dark={{ color: "warmGray.50" }}
           fontWeight={900}
+          textAlign="center"
         >
           Signup
         </Heading>
-        <Heading mt="1" color="coolGray.600" fontWeight={600} size="xs">
+        <Heading
+          mt="1"
+          color="coolGray.600"
+          fontWeight={600}
+          size="xs"
+          textAlign="center"
+        >
           Create a new account
         </Heading>
         <VStack space={3} mt="5">
