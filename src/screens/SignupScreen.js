@@ -10,7 +10,6 @@ import {
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
-import { UserContext } from "../contexts/userContext";
 
 export default function SignupScreen() {
   const navigation = useNavigation();
@@ -31,8 +30,8 @@ export default function SignupScreen() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const newUser = userCredential.user;
-        UserContext.Provider.current.setValue(newUser);
+        const user = userCredential.user;
+        console.log("User created successfully", user);
       })
       .catch((error) => {
         console.log(error);
