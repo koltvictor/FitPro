@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
-import { action, makeObservable, observable } from "mobx";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -13,7 +12,6 @@ export const UserProvider = ({ children }) => {
           setUser(userAuth);
           const uid = userAuth.uid;
           const email = userAuth.email;
-          // Call the unsubscribe function inside the onAuthStateChanged callback
           const unsubscribe = () => {
             unsubscribeProfile();
           };
@@ -30,7 +28,7 @@ export const UserProvider = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   console.log("this is provider:", user);
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
