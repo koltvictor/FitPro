@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Box,
   Center,
@@ -6,24 +7,33 @@ import {
   VStack,
   FormControl,
   Input,
+  useToast,
 } from "native-base";
 import React, { useState } from "react";
 import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
 
 export default function SignupScreen({ navigation }) {
+  const toast = useToast();
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
     if (email === "" || password === "" || confirmPassword === "") {
-      console.log("Error", "All fields are required");
+      toast.show({
+        description: "All fields are required",
+        variant: "top-accent",
+      });
       return;
     }
 
     if (password !== confirmPassword) {
-      console.log("Error", "Passwords do not match");
+      toast.show({
+        description: "Passwords do not match",
+        variant: "top-accent",
+      });
       return;
     }
 
@@ -39,16 +49,22 @@ export default function SignupScreen({ navigation }) {
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
-          console.log("Error", "That email address is already in use!");
+          toast.show({
+            description: "That email address is already in use!",
+            variant: "top-accent",
+          });
         }
 
         if (error.code === "auth/invalid-email") {
-          console.log("Error", "That email address is invalid!");
+          toast.show({
+            description: "That email address is invalid!",
+            variant: "top-accent",
+          });
         }
 
         console.error(error);
       });
-    navigation.navigate("Home");
+    navigation.navigate("Questions");
   };
 
   return (
@@ -73,6 +89,13 @@ export default function SignupScreen({ navigation }) {
           Create a new account
         </Heading>
         <VStack space={3} mt="5">
+          {/* <FormControl>
+            <FormControl.Label>Name</FormControl.Label>
+            <Input
+              value={displayName}
+              onChange={(text) => setDisplayName(text)}
+            />
+          </FormControl> */}
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
