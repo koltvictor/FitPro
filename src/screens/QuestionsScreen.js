@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Text, Button, Box, Input, Radio, Center } from "native-base";
+import { Text, Button, Box, Checkbox, Input, Radio, Center } from "native-base";
 import { set } from "mobx";
 import { SafeAreaView } from "react-native";
 
-const QuestionsScreen = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+const QuestionsScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [motivation, setMotivation] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
@@ -56,14 +55,18 @@ const QuestionsScreen = () => {
     },
     {
       index: 4,
-      name: "What is your weight?",
+      name: "What is your weight in lbs?",
       type: "input",
     },
     {
       index: 5,
       name: "What is your body type?",
       type: "radio",
-      options: ["Ectomorph", "Mesomorph", "Endomorph"],
+      options: [
+        "Ectomorph: tall & thin with small bones and little muscle mass, difficulty gaining weight and building muscle",
+        "Mesomorph: athletic and muscular, with medium build and can easily gain muscle and lose fat",
+        "Endomorph: short and stocky, with a large bone structure and difficulty losing weight.",
+      ],
       accessibilityLabel:
         "This is a radio button for the question 'What is your body type?'",
     },
@@ -98,8 +101,24 @@ const QuestionsScreen = () => {
     },
     {
       index: 8,
-      name: "Do you have any dietary restrictions?",
+      name: "What is your current diet like?",
       type: "radio",
+      options: [
+        "I eat very healthfully",
+        "I eat pretty healthfully",
+        "I eat somewhat healthfully",
+        "I eat somewhat unhealthfully",
+        "I eat pretty unhealthfully",
+        "I eat very unhealthfully",
+      ],
+      accessibilityLabel:
+        "This is a radio button for the question 'What is your current diet like?'",
+    },
+    {
+      index: 9,
+      name: "Do you have any dietary restrictions?",
+      type: "checkbox",
+      multiple: true,
       options: [
         "None",
         "Vegetarian",
@@ -112,17 +131,35 @@ const QuestionsScreen = () => {
         "Other",
       ],
       accessibilityLabel:
-        "This is a radio button for the question 'Do you have any dietary restrictions?'",
-      type: "radio",
+        "This is a checkbox for the question 'Do you have any dietary restrictions?'",
+    },
+    {
+      index: 10,
+      name: "What are your fitness goals?",
+      type: "checkbox",
+      multiple: true,
+
+      options: [
+        "Lose Weight",
+        "Gain Muscle",
+        "Maintain Weight",
+        "Improve Cardiovascular Health",
+        "Improve Flexibility",
+        "Improve Strength and Endurance",
+        "Improve Balance and Coordination",
+        "Improve Posture",
+      ],
+      accessibilityLabel:
+        "This is a checkbox for the question 'What are your fitness goals?'",
     },
   ];
 
   const renderQuestion = () => {
     const question = questions[questionIndex];
-    const inputField =
+    let inputField =
       question.type === "input" ? (
         <Input
-          placeholder="Enter your answer"
+          placeholder="Enter your answer here"
           onChange={(value) => {
             switch (question.name) {
               case "What is your name?":
@@ -137,11 +174,7 @@ const QuestionsScreen = () => {
           }}
         />
       ) : (
-        <Radio.Group
-          defaultValue="1"
-          //   name="exampleGroup"
-          accessibilityLabel="favorite colorscheme"
-        >
+        <Radio.Group defaultValue="1" accessibilityLabel="favorite colorscheme">
           {question.options.map((option, i) => (
             <Radio
               colorScheme="emerald"
@@ -155,6 +188,23 @@ const QuestionsScreen = () => {
           ))}
         </Radio.Group>
       );
+    if (question.type === "checkbox") {
+      inputField = (
+        <Checkbox.Group
+          multiple={true}
+          defaultValue={[]}
+          renderCheckbox={(option) => (
+            <Checkbox value={option} key={option} my={1} label={option} />
+          )}
+        >
+          {question.options.map((option, i) => (
+            <Checkbox value={option} key={i} my={1} label={option}>
+              {option}
+            </Checkbox>
+          ))}
+        </Checkbox.Group>
+      );
+    }
     return (
       <SafeAreaView>
         <Box key={questionIndex}>
@@ -183,7 +233,7 @@ const QuestionsScreen = () => {
                 margin="10px"
                 onPress={() => {
                   if (questionIndex === questions.length - 1) {
-                    return;
+                    navigation.navigate("Home");
                   } else {
                     setQuestionIndex(questionIndex + 1);
                     renderQuestion();

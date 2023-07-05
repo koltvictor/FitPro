@@ -17,7 +17,7 @@ export default function Routes() {
       <Stack.Screen
         name="Questions"
         component={QuestionsScreen}
-        // options={{ headerShown: false }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Home"
