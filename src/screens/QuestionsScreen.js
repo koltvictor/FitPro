@@ -160,19 +160,42 @@ const QuestionsScreen = () => {
         <Box key={questionIndex}>
           <Text>{question.name}</Text>
           {inputField}
-          <Button
-            key={questionIndex}
-            onPress={() => {
-              if (questionIndex === questions.length - 1) {
-                return;
-              } else {
-                setQuestionIndex(questionIndex + 1);
-                renderQuestion();
-              }
-            }}
-          >
-            {questionIndex === questions.length - 1 ? "Create Account" : "Next"}
-          </Button>
+          <Center>
+            <Box
+              flexDirection="row"
+              justifyContent="space-between"
+              padding="5px"
+            >
+              {questionIndex > 0 && (
+                <Button
+                  key={questionIndex - 1}
+                  margin="10px"
+                  onPress={() => {
+                    setQuestionIndex(questionIndex - 1);
+                    renderQuestion();
+                  }}
+                >
+                  Back
+                </Button>
+              )}
+              <Button
+                key={questionIndex}
+                margin="10px"
+                onPress={() => {
+                  if (questionIndex === questions.length - 1) {
+                    return;
+                  } else {
+                    setQuestionIndex(questionIndex + 1);
+                    renderQuestion();
+                  }
+                }}
+              >
+                {questionIndex === questions.length - 1
+                  ? "Create Account"
+                  : "Next"}
+              </Button>
+            </Box>
+          </Center>
         </Box>
       </SafeAreaView>
     );
