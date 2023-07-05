@@ -1,5 +1,4 @@
 import {
-  Alert,
   Button,
   Box,
   Center,
@@ -46,6 +45,16 @@ export default function SignupScreen({ navigation }) {
           "User set to userContext and userProvider",
           UserContext.Provider.current
         );
+
+        if (userCredential.user.email === "existing_email") {
+          toast.show({
+            description: "That email address is already in use!",
+            variant: "top-accent",
+          });
+          return;
+        }
+
+        navigation.navigate("Questions");
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -64,7 +73,6 @@ export default function SignupScreen({ navigation }) {
 
         console.error(error);
       });
-    navigation.navigate("Questions");
   };
 
   return (

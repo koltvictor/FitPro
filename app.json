@@ -11,6 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "bodyParser": {
+      "json": {
+        "type": "application/json"
+      },
+      "raw": {
+        "type": "application/octet-stream"
+      }
+    },    
     "assetBundlePatterns": [
       "**/*"
     ],
