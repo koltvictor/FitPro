@@ -10,6 +10,8 @@ export const UserProvider = ({ children }) => {
       try {
         if (userAuth) {
           setUser(userAuth);
+          const uid = userAuth.uid;
+          const email = userAuth.email;
           const unsubscribe = () => {
             unsubscribeProfile();
           };

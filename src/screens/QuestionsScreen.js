@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Text, Button, Box, Checkbox, Input, Radio, Center } from "native-base";
-import { set } from "mobx";
-import { SafeAreaView } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { Text, Button, Box, Input, Radio, Center } from "native-base";
+import { questions } from "../data/QuestionData";
+import { SafeAreaView, View } from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { db } from "../app/firebase/firebase";
+import { UserContext } from "../contexts/userContext";
 
 const QuestionsScreen = ({ navigation }) => {
+  const user = useContext(UserContext);
   const [name, setName] = useState("");
   const [motivation, setMotivation] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
@@ -14,6 +18,7 @@ const QuestionsScreen = ({ navigation }) => {
   const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState("");
   const [fitnessGoals, setFitnessGoals] = useState("");
+  const [isSelected, setSelection] = useState(false);
 
   const [questionIndex, setQuestionIndex] = useState(0);
 
@@ -21,138 +26,28 @@ const QuestionsScreen = ({ navigation }) => {
     renderQuestion();
   }, [questionIndex]);
 
-  const questions = [
-    {
-      index: 0,
-      name: "What is your name?",
-      type: "input",
-    },
-    {
-      index: 1,
-      name: "What is your motivation for achieving your fitness goals?",
-      type: "input",
-    },
-    {
-      index: 2,
-      name: "What is your age group?",
-      type: "radio",
-      options: [
-        "Under 18",
-        "18-24",
-        "25-34",
-        "35-44",
-        "45-54",
-        "55-64",
-        "65 or Above",
-      ],
-      accessibilityLabel:
-        "This is a radio button for the question 'What is your age group?'",
-    },
-    {
-      index: 3,
-      name: "What is your height?",
-      type: "input",
-    },
-    {
-      index: 4,
-      name: "What is your weight in lbs?",
-      type: "input",
-    },
-    {
-      index: 5,
-      name: "What is your body type?",
-      type: "radio",
-      options: [
-        "Ectomorph: tall & thin with small bones and little muscle mass, difficulty gaining weight and building muscle",
-        "Mesomorph: athletic and muscular, with medium build and can easily gain muscle and lose fat",
-        "Endomorph: short and stocky, with a large bone structure and difficulty losing weight.",
-      ],
-      accessibilityLabel:
-        "This is a radio button for the question 'What is your body type?'",
-    },
-    {
-      index: 6,
-      name: "What is your current lifestyle?",
-      type: "radio",
-      options: [
-        "Very Active",
-        "Pretty Active",
-        "Somewhat Active",
-        "Sporadically Active",
-        "Not Active",
-      ],
-      accessibilityLabel:
-        "This is a radio button for the question 'What is your current lifestyle?'",
-    },
-    {
-      index: 7,
-      name: "What is your fitness experience level?",
-      type: "radio",
-      options: [
-        "I work out multiple times a day",
-        "I work out daily",
-        "I work out 2-4 times a week",
-        "I work out occasionally",
-        "I rarely work out",
-        "I never work out",
-      ],
-      accessibilityLabel:
-        "This is a radio button for the question 'What is your fitness experience level?'",
-    },
-    {
-      index: 8,
-      name: "What is your current diet like?",
-      type: "radio",
-      options: [
-        "I eat very healthfully",
-        "I eat pretty healthfully",
-        "I eat somewhat healthfully",
-        "I eat somewhat unhealthfully",
-        "I eat pretty unhealthfully",
-        "I eat very unhealthfully",
-      ],
-      accessibilityLabel:
-        "This is a radio button for the question 'What is your current diet like?'",
-    },
-    {
-      index: 9,
-      name: "Do you have any dietary restrictions?",
-      type: "checkbox",
-      multiple: true,
-      options: [
-        "None",
-        "Vegetarian",
-        "Vegan",
-        "Gluten Free",
-        "Dairy Free",
-        "Keto",
-        "Paleo",
-        "Pescatarian",
-        "Other",
-      ],
-      accessibilityLabel:
-        "This is a checkbox for the question 'Do you have any dietary restrictions?'",
-    },
-    {
-      index: 10,
-      name: "What are your fitness goals?",
-      type: "checkbox",
-      multiple: true,
-
-      options: [
-        "Lose Weight",
-        "Gain Muscle",
-        "Maintain Weight",
-        "Improve Cardiovascular Health",
-        "Improve Flexibility",
-        "Improve Strength and Endurance",
-        "Improve Balance and Coordination",
-        "Improve Posture",
-      ],
-      accessibilityLabel:
-        "This is a checkbox for the question 'What are your fitness goals?'",
-    },
-  ];
+  const handleSubmit = () => {
+    db.collection("profiles")
+      .doc(user.uid)
+      .set({
+        name: name,
+        motivation: motivation,
+        ageGroup: ageGroup,
+        height: height,
+        weight: weight,
+        bodyType: bodyType,
+        lifestyle: lifestyle,
+        fitnessExperienceLevel: fitnessExperienceLevel,
+        dietaryRestrictions: dietaryRestrictions,
+        fitnessGoals: fitnessGoals,
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  };
 
   const renderQuestion = () => {
     const question = questions[questionIndex];
@@ -160,7 +55,7 @@ const QuestionsScreen = ({ navigation }) => {
       question.type === "input" ? (
         <Input
           placeholder="Enter your answer here"
-          onChange={(value) => {
+          onChangeText={(value) => {
             switch (question.name) {
               case "What is your name?":
                 setName(value);
@@ -182,6 +77,9 @@ const QuestionsScreen = ({ navigation }) => {
               key={i}
               my={1}
               label={option}
+              //   onPress={() => {
+              //     setAgeGroup(option);
+              //   }}
             >
               {option}
             </Radio>
@@ -190,63 +88,62 @@ const QuestionsScreen = ({ navigation }) => {
       );
     if (question.type === "checkbox") {
       inputField = (
-        <Checkbox.Group
-          multiple={true}
-          defaultValue={[]}
-          renderCheckbox={(option) => (
-            <Checkbox value={option} key={option} my={1} label={option} />
-          )}
-        >
+        <View>
           {question.options.map((option, i) => (
-            <Checkbox value={option} key={i} my={1} label={option}>
-              {option}
-            </Checkbox>
+            <BouncyCheckbox
+              key={i}
+              onPress={() => setSelection(!isSelected)}
+              text={option}
+            />
           ))}
-        </Checkbox.Group>
+        </View>
       );
     }
     return (
       <SafeAreaView>
-        <Box key={questionIndex}>
-          <Text>{question.name}</Text>
-          {inputField}
-          <Center>
-            <Box
-              flexDirection="row"
-              justifyContent="space-between"
-              padding="5px"
-            >
-              {questionIndex > 0 && (
+        <Center>
+          <Box key={questionIndex} maxW="75%" maxH="100%" minW="75%">
+            <Text>{question.name}</Text>
+            {inputField}
+            <Center>
+              <Box
+                flexDirection="row"
+                justifyContent="space-between"
+                padding="5px"
+              >
+                {questionIndex > 0 && (
+                  <Button
+                    key={questionIndex - 1}
+                    margin="10px"
+                    onPress={() => {
+                      setQuestionIndex(questionIndex - 1);
+                      renderQuestion();
+                    }}
+                  >
+                    Back
+                  </Button>
+                )}
                 <Button
-                  key={questionIndex - 1}
+                  key={questionIndex}
                   margin="10px"
                   onPress={() => {
-                    setQuestionIndex(questionIndex - 1);
-                    renderQuestion();
+                    if (questionIndex === questions.length - 1) {
+                      navigation.navigate("Home");
+                      handleSubmit();
+                    } else {
+                      setQuestionIndex(questionIndex + 1);
+                      renderQuestion();
+                    }
                   }}
                 >
-                  Back
+                  {questionIndex === questions.length - 1
+                    ? "Create Account"
+                    : "Next"}
                 </Button>
-              )}
-              <Button
-                key={questionIndex}
-                margin="10px"
-                onPress={() => {
-                  if (questionIndex === questions.length - 1) {
-                    navigation.navigate("Home");
-                  } else {
-                    setQuestionIndex(questionIndex + 1);
-                    renderQuestion();
-                  }
-                }}
-              >
-                {questionIndex === questions.length - 1
-                  ? "Create Account"
-                  : "Next"}
-              </Button>
-            </Box>
-          </Center>
-        </Box>
+              </Box>
+            </Center>
+          </Box>
+        </Center>
       </SafeAreaView>
     );
   };

@@ -14,7 +14,6 @@ import { UserContext } from "../contexts/userContext";
 
 export default function SignupScreen({ navigation }) {
   const toast = useToast();
-  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -39,12 +38,7 @@ export default function SignupScreen({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("User created successfully", user);
         UserContext.Provider.current = <UserContext.Provider value={user} />;
-        console.log(
-          "User set to userContext and userProvider",
-          UserContext.Provider.current
-        );
 
         if (userCredential.user.email === "existing_email") {
           toast.show({
@@ -97,13 +91,6 @@ export default function SignupScreen({ navigation }) {
           Create a new account
         </Heading>
         <VStack space={3} mt="5">
-          {/* <FormControl>
-            <FormControl.Label>Name</FormControl.Label>
-            <Input
-              value={displayName}
-              onChange={(text) => setDisplayName(text)}
-            />
-          </FormControl> */}
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={(text) => setEmail(text)} />
