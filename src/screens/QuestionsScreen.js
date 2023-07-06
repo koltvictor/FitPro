@@ -19,6 +19,7 @@ const QuestionsScreen = ({ navigation }) => {
   const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
   const [currentDiet, setCurrentDiet] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState([]);
+  console.log("dietaryRestrictions", dietaryRestrictions);
   const [fitnessGoals, setFitnessGoals] = useState([]);
 
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -117,16 +118,41 @@ const QuestionsScreen = ({ navigation }) => {
             <BouncyCheckbox
               key={i}
               value={option}
-              onPress={() => {
+              onPress={(isChecked) => {
                 if (question.name === "Do you have any dietary restrictions?") {
                   const newDietaryRestrictions = [
                     ...dietaryRestrictions,
                     option,
                   ];
-                  setDietaryRestrictions(newDietaryRestrictions);
+
+                  const filteredDietaryRestrictions =
+                    newDietaryRestrictions.filter(
+                      (restriction) => restriction !== option
+                    );
+
+                  const uniqueValues = [
+                    ...new Set(filteredDietaryRestrictions),
+                  ];
+
+                  const arrayToDeploy = isChecked
+                    ? newDietaryRestrictions
+                    : uniqueValues;
+
+                  setDietaryRestrictions(arrayToDeploy);
                 } else if (question.name === "What are your fitness goals?") {
                   const newFitnessGoals = [...fitnessGoals, option];
-                  setFitnessGoals(newFitnessGoals);
+
+                  const filteredFitnessGoals = newFitnessGoals.filter(
+                    (goal) => goal !== option
+                  );
+
+                  const uniqueValues = [...new Set(filteredFitnessGoals)];
+
+                  const arrayToDeploy = isChecked
+                    ? newFitnessGoals
+                    : uniqueValues;
+
+                  setFitnessGoals(arrayToDeploy);
                 }
               }}
               text={option}
