@@ -41,8 +41,8 @@ export const questions = [
       type: "radio",
       options: [
         "Ectomorph: tall & thin with small bones and little muscle mass, difficulty gaining weight and building muscle",
-        "Mesomorph: athletic and muscular, with medium build and can easily gain muscle and lose fat",
-        "Endomorph: short and stocky, with a large bone structure and difficulty losing weight.",
+        "Mesomorph: athletic & muscular, with medium build and can easily gain muscle and lose fat",
+        "Endomorph: short & stocky, with a large bone structure and difficulty losing weight.",
       ],
       accessibilityLabel:
         "This is a radio button for the question 'What is your body type?'",

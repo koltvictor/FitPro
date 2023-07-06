@@ -5,6 +5,7 @@ import { SafeAreaView, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { db } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
+import { set } from "mobx";
 
 const QuestionsScreen = ({ navigation }) => {
   const user = useContext(UserContext);
@@ -16,9 +17,9 @@ const QuestionsScreen = ({ navigation }) => {
   const [bodyType, setBodyType] = useState("");
   const [lifestyle, setLifestyle] = useState("");
   const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
-  const [dietaryRestrictions, setDietaryRestrictions] = useState("");
-  const [fitnessGoals, setFitnessGoals] = useState("");
-  const [isSelected, setSelection] = useState(false);
+  const [currentDiet, setCurrentDiet] = useState("");
+  const [dietaryRestrictions, setDietaryRestrictions] = useState([]);
+  const [fitnessGoals, setFitnessGoals] = useState([]);
 
   const [questionIndex, setQuestionIndex] = useState(0);
 
@@ -38,6 +39,7 @@ const QuestionsScreen = ({ navigation }) => {
         bodyType: bodyType,
         lifestyle: lifestyle,
         fitnessExperienceLevel: fitnessExperienceLevel,
+        currentDiet: currentDiet,
         dietaryRestrictions: dietaryRestrictions,
         fitnessGoals: fitnessGoals,
       })
@@ -63,6 +65,12 @@ const QuestionsScreen = ({ navigation }) => {
               case "What is your motivation for achieving your fitness goals?":
                 setMotivation(value);
                 break;
+              case "What is your height?":
+                setHeight(value);
+                break;
+              case "What is your weight in lbs?":
+                setWeight(value);
+                break;
               default:
                 break;
             }
@@ -77,9 +85,25 @@ const QuestionsScreen = ({ navigation }) => {
               key={i}
               my={1}
               label={option}
-              //   onPress={() => {
-              //     setAgeGroup(option);
-              //   }}
+              onPress={() => {
+                if (question.name === "What is your age group?") {
+                  setAgeGroup(option);
+                } else if (question.name === "What is your body type?") {
+                  setBodyType(option);
+                } else if (
+                  question.name === "What is your current lifestyle?"
+                ) {
+                  setLifestyle(option);
+                } else if (
+                  question.name === "What is your fitness experience level?"
+                ) {
+                  setFitnessExperienceLevel(option);
+                } else if (
+                  question.name === "What is your current diet like?"
+                ) {
+                  setCurrentDiet(option);
+                }
+              }}
             >
               {option}
             </Radio>
@@ -92,7 +116,19 @@ const QuestionsScreen = ({ navigation }) => {
           {question.options.map((option, i) => (
             <BouncyCheckbox
               key={i}
-              onPress={() => setSelection(!isSelected)}
+              value={option}
+              onPress={() => {
+                if (question.name === "Do you have any dietary restrictions?") {
+                  const newDietaryRestrictions = [
+                    ...dietaryRestrictions,
+                    option,
+                  ];
+                  setDietaryRestrictions(newDietaryRestrictions);
+                } else if (question.name === "What are your fitness goals?") {
+                  const newFitnessGoals = [...fitnessGoals, option];
+                  setFitnessGoals(newFitnessGoals);
+                }
+              }}
               text={option}
             />
           ))}
