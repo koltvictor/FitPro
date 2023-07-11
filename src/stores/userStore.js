@@ -1,18 +1,22 @@
-import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
+import { makeObservable, observable, action } from "mobx";
 
-export const userStore = {
-  // create a user
-  createUser: async (email, password) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-      return user;
-    } catch (error) {
-      console.error(error);
-    }
-  },
-};
+class UserStore {
+  @observable user = null;
+  @observable profile = null;
+
+  constructor() {
+    makeObservable(this);
+  }
+
+  @action setUser(user) {
+    this.user = user;
+  }
+
+  @action setProfile(profile) {
+    this.profile = profile;
+  }
+}
+
+const userStore = new UserStore();
+
+export default userStore;

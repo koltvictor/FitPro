@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
+import {
+  auth,
+  db,
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+} from "../app/firebase/firebase";
+import userStore from "../stores/userStore";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const onAuthStateChanged = async (userAuth) => {
       try {
         if (userAuth) {
           setUser(userAuth);
-          const uid = userAuth.uid;
-          const email = userAuth.email;
-          const unsubscribe = () => {
-            unsubscribeProfile();
-          };
+          userStore.setUser(userAuth);
+          const profileDoc = await db
+            .collection("profiles")
+            .doc(userAuth.uid)
+            .get();
+          setProfile(profileDoc.data());
+          userStore.setProfile(profileDoc.data());
         } else {
           setUser(null);
         }
@@ -30,6 +42,12 @@ export const UserProvider = ({ children }) => {
     };
   }, []);
 
-  console.log("this is provider:", user);
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  console.log("this is provider user:", user);
+  console.log("this is provider profile:", profile);
+
+  const value = {
+    user,
+    profile,
+  };
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

@@ -9,7 +9,11 @@ import {
   useToast,
 } from "native-base";
 import React, { useState } from "react";
-import { auth, createUserWithEmailAndPassword } from "../app/firebase/firebase";
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  db,
+} from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
 
 export default function SignupScreen({ navigation }) {
@@ -38,7 +42,26 @@ export default function SignupScreen({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        const uid = user.uid;
         UserContext.Provider.current = <UserContext.Provider value={user} />;
+
+        db.collection("profiles")
+          .doc(user.uid)
+          .set({
+            uid: uid,
+            name: "",
+            ageGroup: "",
+            height: "",
+            weight: "",
+            bodyType: "",
+            lifestyle: "",
+            currentDiet: "",
+            dietaryRestrictions: "",
+            fitnessGoals: "",
+          })
+          .then(() => {
+            console.log("User document created successfully");
+          });
 
         if (userCredential.user.email === "existing_email") {
           toast.show({
@@ -65,7 +88,13 @@ export default function SignupScreen({ navigation }) {
           });
         }
 
-        console.error(error);
+        if (error.code === "auth/weak-password") {
+          toast.show({
+            description: "Password should be at least 6 characters!",
+            variant: "top-accent",
+          });
+          return;
+        }
       });
   };
 

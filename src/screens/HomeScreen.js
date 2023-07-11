@@ -1,12 +1,13 @@
 import { SafeAreaView, Text, View } from "react-native";
-import React, { useContext } from "react";
-import { UserContext } from "../contexts/userContext";
-import { Box } from "native-base";
+import React from "react";
+import userStore from "../stores/userStore";
+import { Box, Center } from "native-base";
+import TabBar from "../components/TabBar";
 
 export default function HomeScreen() {
-  const user = useContext(UserContext);
+  const { profile } = userStore;
 
-  if (!user) {
+  if (!profile) {
     return (
       <View>
         <Text>Loading ...</Text>
@@ -17,9 +18,19 @@ export default function HomeScreen() {
   return (
     <SafeAreaView>
       <Box>
-        <Text>Home Screen</Text>
-        <Text>Welcome, {user.email}</Text>
+        <Center>
+          <Text>Welcome, {profile.name}</Text>
+          <Text>Height: {profile.height}</Text>
+          <Text>Weight: {profile.weight}</Text>
+          <Text>Body Type: {profile.bodyType}</Text>
+          <Text>Lifestyle: {profile.lifestyle}</Text>
+          <Text>Fitness Experience: {profile.fitnessExperience}</Text>
+          <Text>Current Diet: {profile.currentDiet}</Text>
+          <Text>Dietary Restrictions: {profile.dietaryRestrictions}</Text>
+          <Text>Fitness Goals: {profile.fitnessGoals} </Text>
+        </Center>
       </Box>
+      <TabBar />
     </SafeAreaView>
   );
 }

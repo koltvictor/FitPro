@@ -3,9 +3,9 @@ import { Text, Button, Box, Input, Radio, Center } from "native-base";
 import { questions } from "../data/QuestionData";
 import { SafeAreaView, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { db } from "../app/firebase/firebase";
+import { db, doc, getDoc, updateDoc } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
-import { set } from "mobx";
+import userStore from "../stores/userStore";
 
 const QuestionsScreen = ({ navigation }) => {
   const user = useContext(UserContext);
@@ -19,8 +19,11 @@ const QuestionsScreen = ({ navigation }) => {
   const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
   const [currentDiet, setCurrentDiet] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState([]);
-  console.log("dietaryRestrictions", dietaryRestrictions);
   const [fitnessGoals, setFitnessGoals] = useState([]);
+  const [timeline, setTimeline] = useState("");
+  const [dailyAllotment, setDailyAllotment] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [currentFitnessLevel, setCurrentFitnessLevel] = useState("");
 
   const [questionIndex, setQuestionIndex] = useState(0);
 
@@ -28,53 +31,30 @@ const QuestionsScreen = ({ navigation }) => {
     renderQuestion();
   }, [questionIndex]);
 
-  const handleSubmit = () => {
-    db.collection("profiles")
-      .doc(user.uid)
-      .set({
-        name: name,
-        motivation: motivation,
-        ageGroup: ageGroup,
-        height: height,
-        weight: weight,
-        bodyType: bodyType,
-        lifestyle: lifestyle,
-        fitnessExperienceLevel: fitnessExperienceLevel,
-        currentDiet: currentDiet,
-        dietaryRestrictions: dietaryRestrictions,
-        fitnessGoals: fitnessGoals,
-      })
-      .then(() => {
-        console.log("Document successfully written!");
-      })
-      .catch((error) => {
-        console.error("Error writing document: ", error);
-      });
-  };
-
   const renderQuestion = () => {
     const question = questions[questionIndex];
     let inputField =
       question.type === "input" ? (
         <Input
           placeholder="Enter your answer here"
-          onChangeText={(value) => {
+          onChangeText={(text) => {
             switch (question.name) {
               case "What is your name?":
-                setName(value);
+                setName(text);
                 break;
               case "What is your motivation for achieving your fitness goals?":
-                setMotivation(value);
+                setMotivation(text);
                 break;
               case "What is your height?":
-                setHeight(value);
+                setHeight(text);
                 break;
               case "What is your weight in lbs?":
-                setWeight(value);
+                setWeight(text);
                 break;
               default:
                 break;
             }
+            return;
           }}
         />
       ) : (
@@ -96,6 +76,10 @@ const QuestionsScreen = ({ navigation }) => {
                 ) {
                   setLifestyle(option);
                 } else if (
+                  question.name === "What is your current fitness level?"
+                ) {
+                  setCurrentFitnessLevel(option);
+                } else if (
                   question.name === "What is your fitness experience level?"
                 ) {
                   setFitnessExperienceLevel(option);
@@ -103,6 +87,20 @@ const QuestionsScreen = ({ navigation }) => {
                   question.name === "What is your current diet like?"
                 ) {
                   setCurrentDiet(option);
+                } else if (
+                  question.name === "What is your fitness goal timeline?"
+                ) {
+                  setTimeline(option);
+                } else if (
+                  question.name ===
+                  "How much time do you have to dedicate to working out in a day?"
+                ) {
+                  setDailyAllotment(option);
+                } else if (
+                  question.name-- -
+                  "Do you have any injuries, any allergies, any health conditions, or any other information you would like to share?  Are there any workouts you  prefer (i.e. HITT, yoga, pilates, etc.)?  Any foods you really don't like?  More information is better!"
+                ) {
+                  setAdditionalInfo(option);
                 }
               }}
             >
@@ -118,6 +116,8 @@ const QuestionsScreen = ({ navigation }) => {
             <BouncyCheckbox
               key={i}
               value={option}
+              fillColor="black"
+              textStyle={{ textDecorationLine: "none", color: "black" }}
               onPress={(isChecked) => {
                 if (question.name === "Do you have any dietary restrictions?") {
                   const newDietaryRestrictions = [
@@ -190,8 +190,7 @@ const QuestionsScreen = ({ navigation }) => {
                   margin="10px"
                   onPress={() => {
                     if (questionIndex === questions.length - 1) {
-                      navigation.navigate("Home");
-                      handleSubmit();
+                      handleUpdateProfile();
                     } else {
                       setQuestionIndex(questionIndex + 1);
                       renderQuestion();
@@ -208,6 +207,37 @@ const QuestionsScreen = ({ navigation }) => {
         </Center>
       </SafeAreaView>
     );
+  };
+
+  const handleUpdateProfile = async () => {
+    const uid = user.user.uid;
+    const docRef = doc(db, "profiles", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await updateDoc(doc(db, "profiles", uid), {
+        name: name,
+        ageGroup: ageGroup,
+        height: height,
+        weight: weight,
+        bodyType: bodyType,
+        currentFitnessLevel: currentFitnessLevel,
+        lifestyle: lifestyle,
+        fitnessExperienceLevel: fitnessExperienceLevel,
+        currentDiet: currentDiet,
+        dietaryRestrictions: dietaryRestrictions,
+        fitnessGoals: fitnessGoals,
+        timeline: timeline,
+        dailyAllotment: dailyAllotment,
+        additionalInfo: additionalInfo,
+      });
+      const updateProfileDoc = await getDoc(docRef);
+      const updatedProfile = updateProfileDoc.data();
+      userStore.setProfile(updatedProfile);
+    } else {
+      console.log("No such document!");
+    }
+    navigation.navigate("Home");
   };
 
   return (
