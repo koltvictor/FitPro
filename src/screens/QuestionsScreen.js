@@ -3,6 +3,7 @@ import { Text, Button, Box, Input, Radio, Center } from "native-base";
 import { questions } from "../data/QuestionData";
 import { SafeAreaView, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { Picker } from "@react-native-picker/picker";
 import { db, doc, getDoc, updateDoc } from "../app/firebase/firebase";
 import { UserContext } from "../contexts/userContext";
 import userStore from "../stores/userStore";
@@ -10,13 +11,11 @@ import userStore from "../stores/userStore";
 const QuestionsScreen = ({ navigation }) => {
   const user = useContext(UserContext);
   const [name, setName] = useState("");
-  const [motivation, setMotivation] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [bodyType, setBodyType] = useState("");
   const [lifestyle, setLifestyle] = useState("");
-  const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
   const [currentDiet, setCurrentDiet] = useState("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState([]);
   const [fitnessGoals, setFitnessGoals] = useState([]);
@@ -44,12 +43,6 @@ const QuestionsScreen = ({ navigation }) => {
                 break;
               case "What is your motivation for achieving your fitness goals?":
                 setMotivation(text);
-                break;
-              case "What is your height?":
-                setHeight(text);
-                break;
-              case "What is your weight in lbs?":
-                setWeight(text);
                 break;
               default:
                 break;
@@ -159,6 +152,18 @@ const QuestionsScreen = ({ navigation }) => {
             />
           ))}
         </View>
+      );
+    }
+    if (question.type === "picker") {
+      inputField = (
+        <Picker
+          selectedValue={height}
+          onValueChange={(itemValue, itemIndex) => setHeight(itemValue)}
+        >
+          {question.options.map((option, i) => (
+            <Picker.Item label={option} value={option} key={i} />
+          ))}
+        </Picker>
       );
     }
     return (
