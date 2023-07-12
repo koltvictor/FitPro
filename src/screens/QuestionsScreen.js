@@ -14,6 +14,7 @@ const QuestionsScreen = ({ navigation }) => {
   const [ageGroup, setAgeGroup] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
   const [bodyType, setBodyType] = useState("");
   const [lifestyle, setLifestyle] = useState("");
   const [currentDiet, setCurrentDiet] = useState("");
@@ -157,8 +158,16 @@ const QuestionsScreen = ({ navigation }) => {
     if (question.type === "picker") {
       inputField = (
         <Picker
-          selectedValue={height}
-          onValueChange={(itemValue, itemIndex) => setHeight(itemValue)}
+          selectedValue={
+            question.name === "What is your height?" ? height : weight
+          }
+          onValueChange={(value) => {
+            if (question.name === "What is your height?") {
+              setHeight(value);
+            } else if (question.name === "What is your weight in lbs?") {
+              setWeight(value);
+            }
+          }}
         >
           {question.options.map((option, i) => (
             <Picker.Item label={option} value={option} key={i} />

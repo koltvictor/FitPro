@@ -1,3 +1,12 @@
+const generateWeightOptions = (startWeight, endWeight) => {
+  const options = [];
+  for (let weight = startWeight; weight <= endWeight; weight++) {
+    options.push(`${weight}`);
+  }
+  return options;
+};
+
+
 export const questions = [
     {
       index: 0,
@@ -62,13 +71,16 @@ export const questions = [
         "6'10",
         "6'11",
         "7'0",
-        
+
       ]
     },
     {
+      
       index: 3,
       name: "What is your weight in lbs?",
       type: "picker",
+      options: generateWeightOptions(80, 350),
+      
     },
     {
       index: 4,
