@@ -1,22 +1,28 @@
-import { auth, db } from "../app/firebase/firebase";
-// import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { db } from "../app/firebase/firebase";
 import userStore from "../stores/userStore";
 
-export const useFetchProfile = (uid) => {
-  useEffect(() => {
-    if (!uid) return;
+export const handleUpdateProfile = async () => {
+  try {
+    const uid = user.uid;
+    const profileDocRef = doc(db, "profiles", uid);
+    const updatedFields = {};
+    if (username) {
+      updatedFields.username = username;
+    }
+    if (icon) {
+      updatedFields.icon = icon;
+    }
+    await updateDoc(profileDocRef, updatedFields);
+    console.log("Profile updated successfully");
 
-    const fetchProfile = async () => {
-      const profileRef = db.collection("profiles").doc(uid);
-      const doc = await profileRef.get();
-      if (doc.exists) {
-        userStore.setProfile(doc.data());
-      } else {
-        console.log("No profile data available");
-      }
-    };
+    // Update userStore
+    const updatedProfileDoc = await getDoc(profileDocRef);
+    const updatedProfile = updatedProfileDoc.data();
+    userStore.setProfile(updatedProfile);
 
-    fetchProfile();
-  }, [uid]);
+    // Update local state
+    setProfile(updatedProfile);
+  } catch (error) {
+    console.log("Error updating profile:", error);
+  }
 };

@@ -146,6 +146,16 @@ export default function SignupScreen({ navigation }) {
           <Button mt="2" onPress={handleSignup}>
             Signup
           </Button>
+          <Button
+            mt="2"
+            backgroundColor="#FFFFFF"
+            borderColor="#20A8F4"
+            borderWidth="1px"
+            _text={{ color: "#20A8F4" }}
+            onPress={() => navigation.navigate("Login")}
+          >
+            Already have an account? Login here.
+          </Button>
         </VStack>
       </Box>
     </Center>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import { UserContext } from "../contexts/userContext";
 import {
   auth,
@@ -14,6 +15,7 @@ import userStore from "../stores/userStore";
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   useEffect(() => {
     const onAuthStateChanged = async (userAuth) => {
@@ -27,11 +29,14 @@ export const UserProvider = ({ children }) => {
             .get();
           setProfile(profileDoc.data());
           userStore.setProfile(profileDoc.data());
+          setIsLoading(false); // Set isLoading to false when data is fetched
         } else {
           setUser(null);
+          setIsLoading(false); // Set isLoading to false when userAuth is null
         }
       } catch (error) {
         console.log("Error in onAuthStateChanged: ", error);
+        setIsLoading(false); // Set isLoading to false on error
       }
     };
 
@@ -42,8 +47,13 @@ export const UserProvider = ({ children }) => {
     };
   }, []);
 
-  console.log("this is provider user:", user);
-  console.log("this is provider profile:", profile);
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   const value = {
     user,

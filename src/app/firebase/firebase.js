@@ -1,7 +1,13 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserSessionPersistence,
+} from "firebase/auth";
 import {
   getFirestore,
   collection,
@@ -42,4 +48,7 @@ export {
   doc,
   firebaseConfig,
   firebase,
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserSessionPersistence,
 };

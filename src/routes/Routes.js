@@ -1,6 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignupScreen from "../screens/SignupScreen";
+import LoginScreen from "../screens/LoginScreen";
 import QuestionsScreen from "../screens/QuestionsScreen";
 import HomeScreen from "../screens/HomeScreen";
 
@@ -12,6 +13,11 @@ export default function Routes() {
       <Stack.Screen
         name="Signup"
         component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
