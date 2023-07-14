@@ -4,6 +4,9 @@ import SignupScreen from "../screens/SignupScreen";
 import LoginScreen from "../screens/LoginScreen";
 import QuestionsScreen from "../screens/QuestionsScreen";
 import HomeScreen from "../screens/HomeScreen";
+import FavoritesScreen from "../screens/FavoritesScreen";
+import MealScreen from "../screens/MealScreen";
+import WorkoutScreen from "../screens/WorkoutScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +33,9 @@ export default function Routes() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Favorites" component={FavoritesScreen} />
+      <Stack.Screen name="Meal" component={MealScreen} />
+      <Stack.Screen name="Workout" component={WorkoutScreen} />
     </Stack.Navigator>
   );
 }
