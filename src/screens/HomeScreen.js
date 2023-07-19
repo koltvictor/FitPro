@@ -6,7 +6,6 @@ import UserProfile from "../components/UserProfile";
 export default function HomeScreen() {
   return (
     <SafeAreaView>
-      <UserProfile />
       <TabBar />
     </SafeAreaView>
   );

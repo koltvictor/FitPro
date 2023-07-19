@@ -7,6 +7,7 @@ import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import MealScreen from "../screens/MealScreen";
 import WorkoutScreen from "../screens/WorkoutScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,7 @@ export default function Routes() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="Meal" component={MealScreen} />
       <Stack.Screen name="Workout" component={WorkoutScreen} />
