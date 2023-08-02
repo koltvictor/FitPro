@@ -1,5 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SplashScreen from "../screens/SplashScreen";
 import SignupScreen from "../screens/SignupScreen";
 import LoginScreen from "../screens/LoginScreen";
 import QuestionsScreen from "../screens/QuestionsScreen";
@@ -13,7 +14,10 @@ const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
-    <Stack.Navigator initialRoute="Signup">
+    <Stack.Navigator initialRoute="Splash">
+      <Stack.Screen name="Splash" options={{ headerShown: false }}>
+        {(props) => <SplashScreen {...props} navigation={props.navigation} />}
+      </Stack.Screen>
       <Stack.Screen
         name="Signup"
         component={SignupScreen}

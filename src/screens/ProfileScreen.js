@@ -5,7 +5,6 @@ import UserProfile from "../components/UserProfile";
 export default function ProfileScreen() {
   return (
     <SafeAreaView>
-      <Text>Profile Screen</Text>
       <UserProfile />
     </SafeAreaView>
   );
