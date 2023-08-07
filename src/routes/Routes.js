@@ -38,7 +38,11 @@ export default function Routes() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="Meal" component={MealScreen} />
       <Stack.Screen name="Workout" component={WorkoutScreen} />
