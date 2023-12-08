@@ -242,29 +242,15 @@ const QuestionsScreen = ({ navigation }) => {
         dailyAllotment: dailyAllotment,
         additionalInfo: additionalInfo,
       });
-      userStore.setProfile({
-        name: name,
-        ageGroup: ageGroup,
-        height: height,
-        weight: weight,
-        bodyType: bodyType,
-        currentFitnessLevel: currentFitnessLevel,
-        lifestyle: lifestyle,
-        fitnessExperienceLevel: fitnessExperienceLevel,
-        currentDiet: currentDiet,
-        dietaryRestrictions: dietaryRestrictions,
-        fitnessGoals: fitnessGoals,
-        timeline: timeline,
-        dailyAllotment: dailyAllotment,
-        additionalInfo: additionalInfo,
-      });
       const updateProfileDoc = await getDoc(docRef);
       const updatedProfile = updateProfileDoc.data();
       userStore.setProfile(updatedProfile);
     } else {
       console.log("No such document!");
     }
+    userStore.emitProfileLoaded();
     navigation.navigate("Home");
+    console.log(userStore.profile);
   };
 
   return (

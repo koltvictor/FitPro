@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user]);
 
   if (isLoading) {
     return (

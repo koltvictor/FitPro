@@ -1,62 +1,23 @@
 import { SafeAreaView, Text } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import { db } from "../app/firebase/firebase";
+import React, { useEffect, useState } from "react";
 import userStore from "../stores/userStore";
-import { UserContext } from "../contexts/userContext";
 import { Box, Center } from "native-base";
 
-export default function UserProfile() {
-  const { profile } = userStore;
-  const { user } = useContext(UserContext);
+const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserProfile = async (userId) => {
-      try {
-        setIsLoading(true);
-        const profileRef = db.collection("profiles").doc(userId);
-        const doc = await profileRef.get();
-        if (doc.exists) {
-          const profileData = doc.data();
-          userStore.setProfile(profileData);
-          setIsLoading(false);
-        } else {
-          console.log("No profile data available");
-        }
-      } catch (error) {
-        console.log("Error fetching user profile:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const listener = userStore.onProfileLoaded(() => {
+      setIsLoading(false);
+    });
 
-    if (user) {
-      fetchUserProfile(user.uid);
-    }
-  }, [user]);
+    return () => listener();
+  }, []);
+
+  const { profile } = userStore;
 
   if (isLoading) {
-    return (
-      <SafeAreaView>
-        <Box>
-          <Center>
-            <Text>Loading...</Text>
-          </Center>
-        </Box>
-      </SafeAreaView>
-    );
-  }
-
-  if (!profile) {
-    return (
-      <SafeAreaView>
-        <Box>
-          <Center>
-            <Text>No profile data available</Text>
-          </Center>
-        </Box>
-      </SafeAreaView>
-    );
+    return <Text>Loading profile information...</Text>;
   }
 
   return (
@@ -81,4 +42,6 @@ export default function UserProfile() {
       </Box>
     </SafeAreaView>
   );
-}
+};
+
+export default UserProfile;
