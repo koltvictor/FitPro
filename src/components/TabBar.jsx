@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MealScreen from '../screens/MealScreen';
 import WorkoutScreen from '../screens/WorkoutScreen';
@@ -36,7 +36,7 @@ export default function TabBar() {
         tabBarInactiveTintColor: 'lightgrey',
         tabBarStyle: {
           backgroundColor: 'navy',
-          padding: 10,
+          padding: 20,
           height: 100,
         },
         tabBarLabelStyle: {
@@ -47,10 +47,10 @@ export default function TabBar() {
         })}  
               
     >
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Meal" component={MealScreen} />
-      <Tab.Screen name="Workout" component={WorkoutScreen} />
-      <Tab.Screen name="Favorites" component={FavoritesScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+      <Tab.Screen name="Meal" component={MealScreen} options={{headerShown: false}}/>
+      <Tab.Screen name="Workout" component={WorkoutScreen} options={{headerShown: false}}/>
+      <Tab.Screen name="Favorites" component={FavoritesScreen} options={{headerShown: false}}/>
     </Tab.Navigator>
     </View>
   );

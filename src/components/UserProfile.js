@@ -19,6 +19,7 @@ export default function UserProfile() {
         if (doc.exists) {
           const profileData = doc.data();
           userStore.setProfile(profileData);
+          setIsLoading(false);
         } else {
           console.log("No profile data available");
         }
@@ -75,6 +76,7 @@ export default function UserProfile() {
           <Text>Current Diet: {profile.currentDiet}</Text>
           <Text>Dietary Restrictions: {profile.dietaryRestrictions}</Text>
           <Text>Fitness Goals: {profile.fitnessGoals} </Text>
+          <Text>Additional Info: {profile.additionalInfo}</Text>
         </Center>
       </Box>
     </SafeAreaView>

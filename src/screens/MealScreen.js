@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 import React from "react";
 
 export default function MealScreen() {
   return (
-    <View>
-      <Text>MealScreen</Text>
-    </View>
+    <SafeAreaView>
+      <Text>Meal Screen</Text>
+    </SafeAreaView>
   );
 }

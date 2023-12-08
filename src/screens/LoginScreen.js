@@ -9,12 +9,7 @@ import {
   VStack,
 } from "native-base";
 import React, { useState, useEffect } from "react";
-import {
-  auth,
-  setPersistence,
-  signInWithEmailAndPassword,
-  browserSessionPersistence,
-} from "../app/firebase/firebase";
+import { auth, signInWithEmailAndPassword } from "../app/firebase/firebase";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
