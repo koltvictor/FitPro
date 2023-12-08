@@ -15,7 +15,6 @@ import {
   signInWithEmailAndPassword,
   browserSessionPersistence,
 } from "../app/firebase/firebase";
-import { set } from "mobx";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");

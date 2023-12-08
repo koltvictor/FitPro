@@ -14,7 +14,7 @@ export default function TabBar() {
     <View style={{ height: '100%' }}>
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
+        tabBarIcon: ({ focused, color }) => {
           let iconName;
 
           if (route.name === 'Profile') {
@@ -27,24 +27,21 @@ export default function TabBar() {
             iconName = focused ? 'heart' : 'heart-outline';
           }
 
-          return  <TouchableOpacity>
-          <Ionicons name={iconName} size={30} style={{ height: '100%' }}/>
-        </TouchableOpacity>
+          return       (
+          <Ionicons name={iconName} size={30} style={{ height: '100%' }} color={color} />
+        )
+      
         },
-        tabBarActiveTintColor: 'blue',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: 'lightgreen',
+        tabBarInactiveTintColor: 'lightgrey',
         tabBarStyle: {
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'lightblue',
+          backgroundColor: 'navy',
           padding: 10,
           height: 100,
         },
         tabBarLabelStyle: {
           fontSize: 15,
           fontWeight: 'bold',
-          // marginBottom: 10,
         },
 
         })}  

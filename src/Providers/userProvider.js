@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { UserContext } from "../contexts/userContext";
-import {
-  auth,
-  db,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  deleteDoc,
-} from "../app/firebase/firebase";
+import { auth, db } from "../app/firebase/firebase";
 import userStore from "../stores/userStore";
 
 export const UserProvider = ({ children }) => {
@@ -18,6 +10,7 @@ export const UserProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
   useEffect(() => {
+    console.log("UserProvider useEffect");
     const onAuthStateChanged = async (userAuth) => {
       try {
         if (userAuth) {
