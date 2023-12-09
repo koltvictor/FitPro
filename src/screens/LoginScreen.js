@@ -1,4 +1,3 @@
-import { View, Text, Alert } from "react-native";
 import {
   Box,
   Button,
@@ -10,6 +9,8 @@ import {
 } from "native-base";
 import React, { useState, useEffect } from "react";
 import { auth, signInWithEmailAndPassword } from "../app/firebase/firebase";
+import { db, doc, getDoc, updateDoc } from "../app/firebase/firebase";
+import userStore from "../stores/userStore";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -25,7 +26,18 @@ export default function LoginScreen({ navigation }) {
         email,
         password
       );
+      const uid = userCredential.user.uid;
+      const docRef = doc(db, "profiles", uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const profileData = docSnap.data();
+        userStore.setProfile(profileData);
+      } else {
+        console.log("No such document!");
+      }
       setLoading(false);
+      userStore.emitProfileLoaded();
       navigation.navigate("Home");
     } catch (error) {
       console.warn("Error logging in:", error);
