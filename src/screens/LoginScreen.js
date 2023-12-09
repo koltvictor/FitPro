@@ -8,6 +8,7 @@ import {
   VStack,
 } from "native-base";
 import React, { useState, useEffect } from "react";
+import { Text } from "react-native";
 import { auth, signInWithEmailAndPassword } from "../app/firebase/firebase";
 import { db, doc, getDoc, updateDoc } from "../app/firebase/firebase";
 import userStore from "../stores/userStore";
@@ -40,7 +41,6 @@ export default function LoginScreen({ navigation }) {
       userStore.emitProfileLoaded();
       navigation.navigate("Home");
     } catch (error) {
-      console.warn("Error logging in:", error);
       setLoading(false);
       setError(error.message);
     }
@@ -93,6 +93,9 @@ export default function LoginScreen({ navigation }) {
           >
             Don't have an account yet? Signup!
           </Button>
+          <Center>
+            <Text style={{ color: "red", fontWeight: "bold" }}>{error}</Text>
+          </Center>
         </VStack>
       </Box>
     </Center>
