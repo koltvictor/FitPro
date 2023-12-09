@@ -1,4 +1,4 @@
-import { SafeAreaView, TouchableOpacity, Text } from "react-native";
+import { SafeAreaView } from "react-native";
 import { auth } from "../app/firebase/firebase";
 import React from "react";
 import UserProfile from "../components/UserProfile";
@@ -13,7 +13,15 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView>
       <UserProfile />
-      <Box alignItems="center">
+      <Box
+        style={{
+          position: "absolute",
+          bottom: -250,
+          left: 0,
+          right: 0,
+          padding: 20,
+        }}
+      >
         <Button onPress={handleLogout}>Logout</Button>
       </Box>
     </SafeAreaView>
