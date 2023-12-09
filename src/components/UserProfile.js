@@ -1,11 +1,14 @@
 import { SafeAreaView, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import userStore from "../stores/userStore";
-import { Box, Button, Center, Modal } from "native-base";
+import { Box, Button, Center, Modal, Input } from "native-base";
+import { set } from "mobx";
 
 const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [updatedName, setUpdatedName] = useState("");
+  const [updatedAgeGroup, setUpdatedAgeGroup] = useState("");
 
   useEffect(() => {
     const listener = userStore.onProfileLoaded(() => {
@@ -28,8 +31,8 @@ const UserProfile = () => {
 
     if (docSnap.exists()) {
       await updateDoc(doc(db, "profiles", uid), {
-        name: name,
-        ageGroup: ageGroup,
+        name: updatedName,
+        ageGroup: updatedAgeGroup,
         height: height,
         weight: weight,
         bodyType: bodyType,
@@ -64,7 +67,28 @@ const UserProfile = () => {
             paddingRight: 25,
           }}
         >
-          <Text>Welcome, {profile.name}</Text>
+          <Box
+            style={{
+              borderWidth: 2,
+              borderColor: "#000000",
+              borderRadius: 5,
+              padding: 5,
+              marginBottom: 10,
+              backgroundColor: "#ffffff",
+              shadowColor: "#000000",
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
+              elevation: 6,
+            }}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+              Welcome, {profile.name}
+            </Text>
+          </Box>
           <Text>Age Group: {profile.ageGroup}</Text>
           <Text>Height: {profile.height}</Text>
           <Text>Weight: {profile.weight}</Text>
@@ -78,16 +102,30 @@ const UserProfile = () => {
           <Text>Dietary Restrictions: {profile.dietaryRestrictions}</Text>
           <Text>Fitness Goals: {profile.fitnessGoals} </Text>
           <Text>Additional Info: {profile.additionalInfo}</Text>
-          <Button onPress={() => setIsModalVisible(true)}>
+          <Button
+            style={{ marginTop: 20 }}
+            onPress={() => setIsModalVisible(true)}
+          >
             Update Profile
           </Button>
         </Center>
       </Box>
       <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
         <Modal.Content maxWidth="400px">
-          <Modal.Header>Update Profile</Modal.Header>
+          <Center>
+            <Modal.Header>UPDATE PROFILE</Modal.Header>
+          </Center>
           <Modal.Body>
-            <Text>Update Profile</Text>
+            <Text>Name: {profile.name}</Text>
+            <Input
+              placeholder="Update your name"
+              onChangeText={(text) => setUpdatedName(text)}
+            />
+            <Text>Age Group: {profile.ageGroup}</Text>
+            <Input
+              placeholder="Update your age group"
+              onChangeText={(text) => setUpdatedAgeGroup(text)}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button.Group variant="ghost" space={2}>

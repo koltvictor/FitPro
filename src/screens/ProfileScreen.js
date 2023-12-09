@@ -16,7 +16,7 @@ export default function ProfileScreen({ navigation }) {
       <Box
         style={{
           position: "absolute",
-          bottom: -250,
+          bottom: -150,
           left: 0,
           right: 0,
           padding: 20,
