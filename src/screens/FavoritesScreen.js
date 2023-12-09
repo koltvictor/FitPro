@@ -1,10 +1,13 @@
 import { SafeAreaView, Text } from "react-native";
 import React from "react";
+import { Center } from "native-base";
 
 export default function FavoritesScreen() {
   return (
     <SafeAreaView>
-      <Text>FavoritesScreen</Text>
+      <Center>
+        <Text>Favorite Meals and Workouts</Text>
+      </Center>
     </SafeAreaView>
   );
 }
