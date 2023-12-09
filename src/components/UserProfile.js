@@ -1,14 +1,17 @@
 import { SafeAreaView, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import userStore from "../stores/userStore";
 import { Box, Button, Center, Modal, Input } from "native-base";
-import { set } from "mobx";
+import { UserContext } from "../contexts/userContext";
 
 const UserProfile = () => {
+  const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [updatedName, setUpdatedName] = useState("");
   const [updatedAgeGroup, setUpdatedAgeGroup] = useState("");
+
+  console.log(user);
 
   useEffect(() => {
     const listener = userStore.onProfileLoaded(() => {
