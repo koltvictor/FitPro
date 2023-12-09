@@ -44,6 +44,7 @@ export default function MealScreen() {
           * Consult with a registered dietitian or nutritionist for a more
           personalized meal plan.
         </Text>
+        <Text>* Avoid skipping meals.</Text>
       </Box>
     </SafeAreaView>
   );
