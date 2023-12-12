@@ -1,15 +1,34 @@
 import { SafeAreaView, Text } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
+import { db } from "../app/firebase/firebase";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import userStore from "../stores/userStore";
 import { Box, Button, Center, Modal, Input } from "native-base";
 import { UserContext } from "../contexts/userContext";
+// import UpdateModal from "./UpdateModal";
 
 const UserProfile = () => {
   const { user } = useContext(UserContext);
+  console.log("This is from UserProfile:", user);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [updatedName, setUpdatedName] = useState("");
   const [updatedAgeGroup, setUpdatedAgeGroup] = useState("");
+  const [updatedHeight, setUpdatedHeight] = useState("");
+  const [updatedWeight, setUpdatedWeight] = useState("");
+  const [updatedBodyType, setUpdatedBodyType] = useState("");
+  const [updatedLifestyle, setUpdatedLifestyle] = useState("");
+  const [updatedFitnessExperienceLevel, setUpdatedFitnessExperienceLevel] =
+    useState("");
+  const [updatedCurrentFitnessLevel, setUpdatedCurrentFitnessLevel] =
+    useState("");
+  const [updatedTimeline, setUpdatedTimeline] = useState("");
+  const [updatedDailyAllotment, setUpdatedDailyAllotment] = useState("");
+  const [updatedCurrentDiet, setUpdatedCurrentDiet] = useState("");
+  const [updatedDietaryRestrictions, setUpdatedDietaryRestrictions] =
+    useState("");
+  const [updatedFitnessGoals, setUpdatedFitnessGoals] = useState("");
+  const [updatedAdditionalInfo, setUpdatedAdditionalInfo] = useState("");
 
   console.log(user);
 
@@ -28,7 +47,7 @@ const UserProfile = () => {
   }
 
   const handleUpdateProfile = async () => {
-    const uid = user.user.uid;
+    const uid = user.uid;
     const docRef = doc(db, "profiles", uid);
     const docSnap = await getDoc(docRef);
 
@@ -36,18 +55,18 @@ const UserProfile = () => {
       await updateDoc(doc(db, "profiles", uid), {
         name: updatedName,
         ageGroup: updatedAgeGroup,
-        height: height,
-        weight: weight,
-        bodyType: bodyType,
-        currentFitnessLevel: currentFitnessLevel,
-        lifestyle: lifestyle,
-        fitnessExperienceLevel: fitnessExperienceLevel,
-        currentDiet: currentDiet,
-        dietaryRestrictions: dietaryRestrictions,
-        fitnessGoals: fitnessGoals,
-        timeline: timeline,
-        dailyAllotment: dailyAllotment,
-        additionalInfo: additionalInfo,
+        height: updatedHeight,
+        weight: updatedWeight,
+        bodyType: updatedBodyType,
+        currentFitnessLevel: updatedCurrentFitnessLevel,
+        lifestyle: updatedLifestyle,
+        fitnessExperienceLevel: updatedFitnessExperienceLevel,
+        currentDiet: updatedCurrentDiet,
+        dietaryRestrictions: updatedDietaryRestrictions,
+        fitnessGoals: updatedFitnessGoals,
+        timeline: updatedTimeline,
+        dailyAllotment: updatedDailyAllotment,
+        additionalInfo: updatedAdditionalInfo,
       });
       const updateProfileDoc = await getDoc(docRef);
       const updatedProfile = updateProfileDoc.data();
@@ -133,7 +152,7 @@ const UserProfile = () => {
           <Modal.Footer>
             <Button.Group variant="ghost" space={2}>
               <Button onPress={() => setIsModalVisible(false)}>Cancel</Button>
-              <Button onPress={handleUpdateProfile}>Save</Button>
+              <Button onPress={handleUpdateProfile}>Save Changes</Button>
             </Button.Group>
           </Modal.Footer>
         </Modal.Content>
