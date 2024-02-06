@@ -10,26 +10,53 @@ import userStore from "../stores/userStore";
 
 const QuestionsScreen = ({ navigation }) => {
   const user = useContext(UserContext);
-  const [name, setName] = useState("");
-  const [ageGroup, setAgeGroup] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [fitnessExperienceLevel, setFitnessExperienceLevel] = useState("");
-  const [bodyType, setBodyType] = useState("");
-  const [lifestyle, setLifestyle] = useState("");
-  const [currentDiet, setCurrentDiet] = useState("");
-  const [dietaryRestrictions, setDietaryRestrictions] = useState([]);
-  const [fitnessGoals, setFitnessGoals] = useState([]);
-  const [timeline, setTimeline] = useState("");
-  const [dailyAllotment, setDailyAllotment] = useState("");
-  const [additionalInfo, setAdditionalInfo] = useState("");
-  const [currentFitnessLevel, setCurrentFitnessLevel] = useState("");
+  const [answers, setAnswers] = useState({
+    name: "",
+    ageGroup: "",
+    height: "",
+    weight: "",
+    bodyType: "",
+    currentFitnessLevel: "",
+    lifestyle: "",
+    fitnessExperienceLevel: "",
+    currentDiet: "",
+    dietaryRestrictions: [],
+    fitnessGoals: [],
+    timeline: "",
+    dailyAllotment: "",
+    additionalInfo: "",
+  });
 
   const [questionIndex, setQuestionIndex] = useState(0);
 
-  useEffect(() => {
-    renderQuestion();
-  }, [questionIndex]);
+  const updateAnswer = (question, answer) => {
+    setAnswers((prevAnswers) => {
+      return {
+        ...prevAnswers,
+        [question.answerKey]: answer,
+      };
+    });
+  };
+
+  const updateArrayAnswer = (question, answer, addAnswer) => {
+    if (addAnswer) {
+      setAnswers((prevAnswers) => {
+        return {
+          ...prevAnswers,
+          [question.answerKey]: [...prevAnswers[question.answerKey], answer],
+        };
+      });
+    } else {
+      setAnswers((prevAnswers) => {
+        return {
+          ...prevAnswers,
+          [question.answerKey]: prevAnswers[question.answerKey].filter(
+            (item) => item !== answer
+          ),
+        };
+      });
+    }
+  };
 
   const renderQuestion = () => {
     const question = questions[questionIndex];
@@ -38,20 +65,9 @@ const QuestionsScreen = ({ navigation }) => {
         <Input
           placeholder="Enter your answer here"
           onChangeText={(text) => {
-            switch (question.name) {
-              case "What is your name?":
-                setName(text);
-                break;
-              case "What is your motivation for achieving your fitness goals?":
-                setMotivation(text);
-                break;
-              case "Do you have any injuries, any allergies, any health conditions, or any other information you would like to share?  Are there any workouts you  prefer (i.e. HITT, yoga, pilates, etc.)?  Any foods you really don't like?  More information is better!":
-                setAdditionalInfo(text);
-              default:
-                break;
-            }
-            return;
+            updateAnswer(question, text);
           }}
+          value={answers[question.answerKey]}
         />
       ) : (
         <Radio.Group defaultValue="1" accessibilityLabel="favorite colorscheme">
@@ -63,37 +79,9 @@ const QuestionsScreen = ({ navigation }) => {
               my={1}
               label={option}
               onPress={() => {
-                if (question.name === "What is your age group?") {
-                  setAgeGroup(option);
-                } else if (question.name === "What is your body type?") {
-                  setBodyType(option);
-                } else if (
-                  question.name === "What is your current lifestyle?"
-                ) {
-                  setLifestyle(option);
-                } else if (
-                  question.name === "What is your current fitness level?"
-                ) {
-                  setCurrentFitnessLevel(option);
-                } else if (
-                  question.name === "What is your fitness experience level?"
-                ) {
-                  setFitnessExperienceLevel(option);
-                } else if (
-                  question.name === "What is your current diet like?"
-                ) {
-                  setCurrentDiet(option);
-                } else if (
-                  question.name === "What is your fitness goal timeline?"
-                ) {
-                  setTimeline(option);
-                } else if (
-                  question.name ===
-                  "How much time do you have to dedicate to working out in a day?"
-                ) {
-                  setDailyAllotment(option);
-                }
+                updateAnswer(question, option);
               }}
+              isChecked={answers[question.answerKey] === option}
             >
               {option}
             </Radio>
@@ -110,43 +98,10 @@ const QuestionsScreen = ({ navigation }) => {
               fillColor="black"
               textStyle={{ textDecorationLine: "none", color: "black" }}
               onPress={(isChecked) => {
-                if (question.name === "Do you have any dietary restrictions?") {
-                  const newDietaryRestrictions = [
-                    ...dietaryRestrictions,
-                    option,
-                  ];
-
-                  const filteredDietaryRestrictions =
-                    newDietaryRestrictions.filter(
-                      (restriction) => restriction !== option
-                    );
-
-                  const uniqueValues = [
-                    ...new Set(filteredDietaryRestrictions),
-                  ];
-
-                  const arrayToDeploy = isChecked
-                    ? newDietaryRestrictions
-                    : uniqueValues;
-
-                  setDietaryRestrictions(arrayToDeploy);
-                } else if (question.name === "What are your fitness goals?") {
-                  const newFitnessGoals = [...fitnessGoals, option];
-
-                  const filteredFitnessGoals = newFitnessGoals.filter(
-                    (goal) => goal !== option
-                  );
-
-                  const uniqueValues = [...new Set(filteredFitnessGoals)];
-
-                  const arrayToDeploy = isChecked
-                    ? newFitnessGoals
-                    : uniqueValues;
-
-                  setFitnessGoals(arrayToDeploy);
-                }
+                updateArrayAnswer(question, option, isChecked);
               }}
               text={option}
+              isChecked={answers[question.answerKey].includes(option)}
             />
           ))}
         </View>
@@ -155,15 +110,9 @@ const QuestionsScreen = ({ navigation }) => {
     if (question.type === "picker") {
       inputField = (
         <Picker
-          selectedValue={
-            question.name === "What is your height?" ? height : weight
-          }
+          selectedValue={answers[question.answerKey]}
           onValueChange={(value) => {
-            if (question.name === "What is your height?") {
-              setHeight(value);
-            } else if (question.name === "What is your weight in lbs?") {
-              setWeight(value);
-            }
+            updateAnswer(question, value);
           }}
         >
           {question.options.map((option, i) => (
@@ -226,22 +175,7 @@ const QuestionsScreen = ({ navigation }) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      await updateDoc(doc(db, "profiles", uid), {
-        name: name,
-        ageGroup: ageGroup,
-        height: height,
-        weight: weight,
-        bodyType: bodyType,
-        currentFitnessLevel: currentFitnessLevel,
-        lifestyle: lifestyle,
-        fitnessExperienceLevel: fitnessExperienceLevel,
-        currentDiet: currentDiet,
-        dietaryRestrictions: dietaryRestrictions,
-        fitnessGoals: fitnessGoals,
-        timeline: timeline,
-        dailyAllotment: dailyAllotment,
-        additionalInfo: additionalInfo,
-      });
+      await updateDoc(doc(db, "profiles", uid), answers);
       const updateProfileDoc = await getDoc(docRef);
       const updatedProfile = updateProfileDoc.data();
       userStore.setProfile(updatedProfile);
@@ -250,7 +184,6 @@ const QuestionsScreen = ({ navigation }) => {
     }
     userStore.emitProfileLoaded();
     navigation.navigate("Home");
-    console.log(userStore.profile);
   };
 
   return (

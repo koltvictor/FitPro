@@ -22,11 +22,13 @@ export const questions = [
   {
     index: 0,
     name: "What is your name?",
+    answerKey: "name",
     type: "input",
   },
   {
     index: 1,
     name: "What is your age group?",
+    answerKey: "ageGroup",
     type: "radio",
     options: [
       "Under 18",
@@ -43,18 +45,21 @@ export const questions = [
   {
     index: 2,
     name: "What is your height?",
+    answerKey: "height",
     type: "picker",
     options: generateHeightOptions(48, 84),
   },
   {
     index: 3,
     name: "What is your weight in lbs?",
+    answerKey: "weight",
     type: "picker",
     options: generateWeightOptions(80, 350),
   },
   {
     index: 4,
     name: "What is your body type?",
+    answerKey: "bodyType",
     type: "radio",
     options: [
       "Ectomorph: I am tall & thin with small bones and little muscle mass, narrow shoulders and a small waist, and I have some difficulty gaining weight and building muscle.",
@@ -67,6 +72,7 @@ export const questions = [
   {
     index: 5,
     name: "What is your current fitness level?",
+    answerKey: "fitnessLevel",
     type: "radio",
     options: [
       "Expert: I am a professional athlete or trainer, or I am in great shape and have been working out for years.",
@@ -80,6 +86,7 @@ export const questions = [
   {
     index: 6,
     name: "What is your current lifestyle?",
+    answerKey: "lifestyle",
     type: "radio",
     options: [
       "Very Active",
@@ -94,6 +101,7 @@ export const questions = [
   {
     index: 7,
     name: "What is your fitness experience level?",
+    answerKey: "fitnessExperience",
     type: "radio",
     options: [
       "I work out multiple times a day",
@@ -109,6 +117,7 @@ export const questions = [
   {
     index: 8,
     name: "What is your current diet like?",
+    answerKey: "diet",
     type: "radio",
     options: [
       "I eat very healthfully",
@@ -124,6 +133,7 @@ export const questions = [
   {
     index: 9,
     name: "Do you have any dietary restrictions?",
+    answerKey: "dietaryRestrictions",
     type: "checkbox",
     options: [
       "None",
@@ -142,6 +152,7 @@ export const questions = [
   {
     index: 10,
     name: "What are your fitness goals?",
+    answerKey: "fitnessGoals",
     type: "checkbox",
     options: [
       "Lose Weight",
@@ -165,6 +176,7 @@ export const questions = [
   {
     index: 11,
     name: "What is your fitness goal timeline?",
+    answerKey: "fitnessGoalTimeline",
     type: "radio",
     options: [
       "I want to achieve my goals as quickly as possible",
@@ -179,6 +191,7 @@ export const questions = [
   {
     index: 12,
     name: "How much time do you have to dedicate to working out in a day?",
+    answerKey: "timeToWorkout",
     type: "radio",
     options: [
       "90+ minutes",
@@ -193,6 +206,7 @@ export const questions = [
   {
     index: 13,
     name: "Do you have any injuries, any allergies, any health conditions, or any other information you would like to share?  Are there any workouts you  prefer (i.e. HITT, yoga, pilates, etc.)?  Any foods you really don't like?  More information is better!",
+    answerKey: "additionalInfo",
     type: "input",
   },
 ];

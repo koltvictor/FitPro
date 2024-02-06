@@ -1,48 +1,35 @@
-import React, { useState } from 'react';
-import { Text, Input, Button } from 'react-native';
-import { Center, Modal } from 'native-base';
-
+import React, { useState } from "react";
+import { Text, Input, Button } from "react-native";
+import { Center, Modal } from "native-base";
 
 const UpdateModal = () => {
-    const [updatedName, setUpdatedName] = useState("");
-    const [updatedAgeGroup, setUpdatedAgeGroup] = useState("");
-    const [isModalVisible, setIsModalVisible] = useState(false);
+  const [updatedName, setUpdatedName] = useState("");
+  const [updatedAgeGroup, setUpdatedAgeGroup] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const handleUpdateProfile = async () => {
-        const uid = user.user.uid;
-        const docRef = doc(db, "profiles", uid);
-        const docSnap = await getDoc(docRef);
-    
-        if (docSnap.exists()) {
-          await updateDoc(doc(db, "profiles", uid), {
-            name: updatedName,
-            ageGroup: updatedAgeGroup,
-            height: height,
-            weight: weight,
-            bodyType: bodyType,
-            currentFitnessLevel: currentFitnessLevel,
-            lifestyle: lifestyle,
-            fitnessExperienceLevel: fitnessExperienceLevel,
-            currentDiet: currentDiet,
-            dietaryRestrictions: dietaryRestrictions,
-            fitnessGoals: fitnessGoals,
-            timeline: timeline,
-            dailyAllotment: dailyAllotment,
-            additionalInfo: additionalInfo,
-          });
-          const updateProfileDoc = await getDoc(docRef);
-          const updatedProfile = updateProfileDoc.data();
-          userStore.setProfile(updatedProfile);
-        } else {
-          console.log("No such document!");
-        }
-        userStore.emitProfileLoaded();
-        setIsModalVisible(false);
-        console.log(userStore.profile);
-      };
-    return (
-        <div className="modal">
-<Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
+  const handleUpdateProfile = async () => {
+    const uid = user.user.uid;
+    const docRef = doc(db, "profiles", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await updateDoc(doc(db, "profiles", uid), {
+        name: updatedName || undefined,
+        ageGroup: updatedAgeGroup || undefined,
+      });
+      const updateProfileDoc = await getDoc(docRef);
+      const updatedProfile = updateProfileDoc.data();
+      userStore.setProfile(updatedProfile);
+    } else {
+      console.log("No such document!");
+    }
+    userStore.emitProfileLoaded();
+    setIsModalVisible(false);
+    console.log(userStore.profile);
+  };
+  return (
+    <div className="modal">
+      <Modal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)}>
         <Modal.Content maxWidth="400px">
           <Center>
             <Modal.Header>UPDATE PROFILE</Modal.Header>
@@ -67,9 +54,8 @@ const UpdateModal = () => {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-
-        </div>
-    );
+    </div>
+  );
 };
 
 export default UpdateModal;
