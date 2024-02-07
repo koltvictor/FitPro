@@ -70,7 +70,6 @@ export default function SignupScreen({ navigation }) {
           });
           return;
         }
-
         navigation.navigate("Questions");
       })
       .catch((error) => {

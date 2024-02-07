@@ -72,7 +72,7 @@ export const questions = [
   {
     index: 5,
     name: "What is your current fitness level?",
-    answerKey: "fitnessLevel",
+    answerKey: "currentFitnessLevel",
     type: "radio",
     options: [
       "Expert: I am a professional athlete or trainer, or I am in great shape and have been working out for years.",
@@ -101,7 +101,7 @@ export const questions = [
   {
     index: 7,
     name: "What is your fitness experience level?",
-    answerKey: "fitnessExperience",
+    answerKey: "fitnessExperienceLevel",
     type: "radio",
     options: [
       "I work out multiple times a day",
@@ -117,7 +117,7 @@ export const questions = [
   {
     index: 8,
     name: "What is your current diet like?",
-    answerKey: "diet",
+    answerKey: "currentDiet",
     type: "radio",
     options: [
       "I eat very healthfully",
@@ -176,7 +176,7 @@ export const questions = [
   {
     index: 11,
     name: "What is your fitness goal timeline?",
-    answerKey: "fitnessGoalTimeline",
+    answerKey: "timeline",
     type: "radio",
     options: [
       "I want to achieve my goals as quickly as possible",
@@ -191,7 +191,7 @@ export const questions = [
   {
     index: 12,
     name: "How much time do you have to dedicate to working out in a day?",
-    answerKey: "timeToWorkout",
+    answerKey: "dailyAllotment",
     type: "radio",
     options: [
       "90+ minutes",

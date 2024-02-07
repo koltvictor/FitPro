@@ -9,6 +9,7 @@ import FavoritesScreen from "../screens/FavoritesScreen";
 import MealScreen from "../screens/MealScreen";
 import WorkoutScreen from "../screens/WorkoutScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import UpdateProfileScreen from "../screens/UpdateProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ export default function Routes() {
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="Meal" component={MealScreen} />
       <Stack.Screen name="Workout" component={WorkoutScreen} />
